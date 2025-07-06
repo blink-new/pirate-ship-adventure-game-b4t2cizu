@@ -3,7 +3,7 @@ import { useGame } from '@/contexts/GameContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Pickaxe, Treasure, ArrowLeft } from 'lucide-react'
+import { Pickaxe, Box, ArrowLeft } from 'lucide-react'
 
 export function IslandScene() {
   const { state, dispatch } = useGame()
@@ -61,7 +61,7 @@ export function IslandScene() {
       <Card className="relative z-10 max-w-md w-full bg-gradient-to-br from-amber-50 to-orange-100 border-4 border-amber-600 shadow-2xl">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-amber-900 flex items-center justify-center">
-            <Treasure className="w-8 h-8 mr-2" />
+            <Box className="w-8 h-8 mr-2" />
             Treasure Island
           </CardTitle>
           <p className="text-amber-800">
