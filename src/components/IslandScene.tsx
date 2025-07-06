@@ -10,22 +10,24 @@ export function IslandScene() {
   const [digging, setDigging] = useState(false)
   const [digProgress, setDigProgress] = useState(0)
 
+  const intervalRef = useRef<number | null>(null)
+
   const handleDigTreasure = () => {
     if (digging) return
 
     setDigging(true)
     setDigProgress(0)
 
-    const digInterval = setInterval(() => {
+    // Use an interval to simulate digging progress
+    intervalRef.current = window.setInterval(() => {
       setDigProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(digInterval)
-          setDigging(false)
-          dispatch({ type: 'FIND_TREASURE' })
-          dispatch({ type: 'ADD_MESSAGE', payload: 'Treasure found! 1000 coins added to your chest!' })
-          return 100
+        const next = Math.min(100, prev + 2)
+        // Stop the interval once we hit 100%
+        if (next >= 100 && intervalRef.current !== null) {
+          clearInterval(intervalRef.current)
+          intervalRef.current = null
         }
-        return prev + 2
+        return next
       })
     }, 100)
   }
@@ -33,6 +35,18 @@ export function IslandScene() {
   const handleReturnToSea = () => {
     dispatch({ type: 'RESET_GAME' })
   }
+
+  // Once digging is complete, dispatch game actions in a separate effect
+  useEffect(() => {
+    if (digging && digProgress >= 100) {
+      setDigging(false)
+      dispatch({ type: 'FIND_TREASURE' })
+      dispatch({
+        type: 'ADD_MESSAGE',
+        payload: 'Treasure found! 1000 coins added to your chest!'
+      })
+    }
+  }, [digProgress, digging, dispatch])
 
   return (
     <div className="w-full h-screen bg-gradient-to-br from-yellow-200 via-orange-200 to-green-300 flex items-center justify-center p-4">
